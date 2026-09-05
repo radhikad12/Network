@@ -1,0 +1,45 @@
+#include <stdlib.h>
+
+int compare(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
+int subarrayBitwiseORs(int* arr, int arrSize) {
+    int* s = (int*)malloc(sizeof(int) * (arrSize * 32 + 1));
+    int s_size = 0;
+    
+    int left = 0; 
+    
+    for (int i = 0; i < arrSize; i++) {
+        int a = arr[i];
+        int right = s_size; 
+        
+        s[s_size++] = a;
+        
+        for (int j = left; j < right; j++) {
+            int new_or = s[j] | a;
+            if (s[s_size - 1] != new_or) {
+                s[s_size++] = new_or;
+            }
+        }
+        
+        left = right;
+    }
+    
+    qsort(s, s_size, sizeof(int), compare);
+    
+    if (s_size == 0) {
+        free(s);
+        return 0;
+    }
+    
+    int distinct_count = 1;
+    for (int i = 1; i < s_size; i++) {
+        if (s[i] != s[i - 1]) {
+            distinct_count++;
+        }
+    }
+    
+    free(s);
+    return distinct_count;
+}
