@@ -1,0 +1,17 @@
+int totalHammingDistance(int* nums, int numsSize) {
+    int total_distance = 0;
+    
+    for (int i = 0; i < 32; i++) {
+        int count_ones = 0;
+        
+        for (int j = 0; j < numsSize; j++) {
+            count_ones += (nums[j] >> i) & 1;
+        }
+        
+        int count_zeros = numsSize - count_ones;
+        
+        total_distance += count_ones * count_zeros;
+    }
+    
+    return total_distance;
+}
